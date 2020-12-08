@@ -133,6 +133,7 @@ const FoodDetails: React.FC = () => {
         extra.id === id ? { ...extra, quantity: extra.quantity + 1 } : extra,
       ),
     );
+    console.log(extras);
   }
 
   function handleDecrementExtra(id: number): void {
@@ -174,7 +175,13 @@ const FoodDetails: React.FC = () => {
 
     const foodTotal = food.price;
 
-    return formatValue((extraTotal + foodTotal) * foodQuantity);
+    console.log(
+      extraTotal,
+      Number(foodTotal),
+      foodQuantity,
+      (extraTotal + foodTotal) * foodQuantity,
+    );
+    return formatValue((extraTotal + Number(foodTotal)) * foodQuantity);
   }, [extras, food, foodQuantity]);
 
   async function handleFinishOrder(): Promise<void> {
