@@ -43,6 +43,15 @@ interface Category {
   image_url: string;
 }
 
+interface GetFoodsParams {
+  category_like?: number;
+  name_like?: string;
+}
+
+interface GetCategoriesParams {
+  id?: number;
+}
+
 const Dashboard: React.FC = () => {
   const [foods, setFoods] = useState<Food[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -61,19 +70,30 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function loadFoods(): Promise<void> {
-      const response = await api.get('./foods', {
-        params: {
-          category_like: selectedCategory,
-          name_like: searchValue,
-        },
+      const params = {} as GetFoodsParams;
+
+      if (searchValue) {
+        params.name_like = searchValue;
+      }
+
+      if (selectedCategory) {
+        params.category_like = selectedCategory;
+      }
+
+      const response = await api.get<Food[]>('/foods', {
+        params,
       });
 
-      setFoods(
-        response.data.map((food: Food) => ({
+      console.log(response);
+
+      const foodsFormatted = response.data.map(food => {
+        return {
           ...food,
           formattedPrice: formatValue(food.price),
-        })),
-      );
+        };
+      });
+
+      setFoods(foodsFormatted);
     }
 
     loadFoods();
@@ -90,11 +110,27 @@ const Dashboard: React.FC = () => {
   }, []);
 
   function handleSelectCategory(id: number): void {
+    // async function selectCategory(): Promise<void> {
+    // const params = {id?} as GetCategoriesParams;
+
+    // if (idValue) {
+    //  params.id = idValue;
+    // }
+
     if (selectedCategory === id) {
       setSelectedCategory(undefined);
     } else {
+      // const newCategory = response.data.map(food => {
+      //   return {
+      //     idValue
+      //   };
+      // });
       setSelectedCategory(id);
+      console.log(categories[id - 1].title);
     }
+    // }
+
+    // selectCategory();
   }
 
   return (

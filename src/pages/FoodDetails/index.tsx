@@ -97,43 +97,12 @@ const FoodDetails: React.FC = () => {
     loadFood();
   }, [routeParams, isFavorite]);
 
-  // useEffect(() => {
-  //   async function isFav(): Promise<void> {
-  //     const response = await api.get(`/foods/${routeParams.id}`);
-
-  //     setExtras(
-  //       response.data.extras.map((extra: Omit<Extra, 'quantity'>) => ({
-  //         ...extra,
-  //         favorite: true,
-  //       })),
-  //     );
-
-  //     // if (response.data) {
-  //     // setIsFavorite(
-  //     //   extras.map(extra =>
-  //     //     extra.id === id ? { ...extra, quantity: extra.quantity + 1 } : extra,
-  //     //   ));
-  //     // }
-
-  //     // if (isFavorite) {
-  //     //   setIsFavorite(true);
-  //     // } else {
-  //     //   setIsFavorite(false);
-  //     // }
-
-  //     console.log(response);
-  //   }
-
-  //   isFav();
-  // }, [routeParams]);
-
   function handleIncrementExtra(id: number): void {
     setExtras(
       extras.map(extra =>
         extra.id === id ? { ...extra, quantity: extra.quantity + 1 } : extra,
       ),
     );
-    console.log(extras);
   }
 
   function handleDecrementExtra(id: number): void {
@@ -175,12 +144,6 @@ const FoodDetails: React.FC = () => {
 
     const foodTotal = food.price;
 
-    console.log(
-      extraTotal,
-      Number(foodTotal),
-      foodQuantity,
-      (extraTotal + foodTotal) * foodQuantity,
-    );
     return formatValue((extraTotal + Number(foodTotal)) * foodQuantity);
   }, [extras, food, foodQuantity]);
 
