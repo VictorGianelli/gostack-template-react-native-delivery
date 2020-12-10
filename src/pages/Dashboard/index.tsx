@@ -48,10 +48,6 @@ interface GetFoodsParams {
   name_like?: string;
 }
 
-interface GetCategoriesParams {
-  id?: number;
-}
-
 const Dashboard: React.FC = () => {
   const [foods, setFoods] = useState<Food[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -84,8 +80,6 @@ const Dashboard: React.FC = () => {
         params,
       });
 
-      console.log(response);
-
       const foodsFormatted = response.data.map(food => {
         return {
           ...food,
@@ -101,36 +95,27 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function loadCategories(): Promise<void> {
-      const response = await api.get('./categories');
+      const response = await api.get<Category[]>('categories');
 
-      setCategories(response.data);
+      const formattedCategories = response.data.map(category => {
+        return {
+          ...category,
+        };
+      });
+
+      setCategories(formattedCategories);
     }
 
     loadCategories();
   }, []);
 
   function handleSelectCategory(id: number): void {
-    // async function selectCategory(): Promise<void> {
-    // const params = {id?} as GetCategoriesParams;
-
-    // if (idValue) {
-    //  params.id = idValue;
-    // }
 
     if (selectedCategory === id) {
       setSelectedCategory(undefined);
     } else {
-      // const newCategory = response.data.map(food => {
-      //   return {
-      //     idValue
-      //   };
-      // });
       setSelectedCategory(id);
-      console.log(categories[id - 1].title);
     }
-    // }
-
-    // selectCategory();
   }
 
   return (
